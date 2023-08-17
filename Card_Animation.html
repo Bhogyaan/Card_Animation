@@ -1,0 +1,176 @@
+<html>
+
+<head>
+
+  <title>Css Div Image Hover</title>
+  <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.js"
+    integrity="sha512-8Z5++K1rB3U+USaLKG6oO8uWWBhdYsM3hmdirnOEWp8h2B1aOikj5zBzlXs8QOrvY9OxEnD2QDkbSKKpfqcIWw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    * {
+      background-color: violet;
+    }
+
+    #container {
+      cursor: pointer;
+      position: absolute;
+      width: 90%;
+      margin: 100px;
+
+    }
+
+    .slider {
+      /* align-items: center; */
+      justify-content: center;
+
+      height: 200px;
+
+      position: fixed;
+      width: 100%;
+    }
+
+    .slider img {
+      /* display:inline-block; */
+      width: 30%;
+      height: 200%;
+      border-radius: 20px;
+      position: absolute;
+      backface-visibility: hidden;
+      transition: .7s all;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="container">
+
+    <div class="slider">
+      <img src="images/a.jpg">
+      <img src="images/b.jpg" />
+      <img class="active" src="images/c.jpg">
+      <img src="images/d.jpg" />
+      <img src="images/e.jpg" />
+    </div>
+
+
+    <script>
+      var Slider = (function () {
+        var total,
+          $images,
+          $slider,
+          sliderWidth,
+          increment = 80;
+        var on = function () {
+          $slider = $(".slider");
+          $images = $(".slider img");
+          sliderWidth = 1000;
+          total = $images.length;
+          position();
+        };
+
+        var position = function () {
+          var sign,
+            half = $(".active").index(),
+            x = 1,
+            z = 1,
+            zindex,
+            scaleX = 1,
+            scaleY = 1.3,
+            transformOrigin;
+          $images.each(function (index, element) {
+            scaleX = scaleY = 1;
+            transformOrigin = sliderWidth / 1;
+            if (index < half) {
+              sign = 1;
+              zindex = index + 1;
+              x = sliderWidth / 2 - increment * (half - index + 1);
+
+            } else if (index > half) {
+              sign = -1;
+              zindex = total - index;
+              x = sliderWidth / 2 + increment * (index - half + 1);
+
+            } else {
+              sign = 0;
+              zindex = total;
+              x = sliderWidth / 2;
+              scaleY = 1.0;
+              scaleX = 1.0;
+            }
+            $(element).css({
+              transform:
+                "translate3d(" +
+                calculateX(x, sign,350) +
+                "px, 0," +
+                z +
+                "px) scale3d(" +
+                scaleX +
+                "," +
+                scaleY +
+                ",1)",
+              "z-index": zindex,
+
+            });
+          });
+        };
+
+        var calculateX = function (position, sign, width) {
+          switch (sign) {
+            case 1:
+            case 0:
+              return position - width / 2;
+            case -1:
+              return position - width /2 ;
+          }
+        };
+
+        var HoverImage = function () {
+          $(".active").removeClass("active");
+          $(this).addClass("active");
+          position();
+        };
+
+        var addEvents = function () {
+
+          $(document).on("mouseover", "img", HoverImage);
+        };
+
+        return {
+          init: function () {
+            on();
+            addEvents();
+          }
+        };
+      })();
+
+      $(function () {
+        var slider = Slider.init();
+      });
+
+
+
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+<button id="prev">
+  <i class="fas"> </i>
+<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path fill="none" d="M0 0h24v24H0V0z" />
+  <path d="M15.61 7.41L14.2 6l-6 6 6 6 1.41-1.41L11.03 12l4.58-4.59z" /> 
+</svg> -->
+</button>
+<button id="next">
+<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path fill="none" d="M0 0h24v24H0V0z" />
+  <path d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z" />
+</svg> -->
+</button>
